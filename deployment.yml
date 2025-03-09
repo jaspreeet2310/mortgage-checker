@@ -1,0 +1,36 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: mortgage-checker
+  labels:
+    app: mortgage-checker
+spec:
+  replicas: 2
+  selector:
+    matchLabels:
+      app: mortgage-checker
+  template:
+    metadata:
+      labels:
+        app: mortgage-checker
+    spec:
+      containers:
+        - name: mortgage-checker
+          image: jaspreeet2310/mortgage-checker:latest  # Replace with your Docker image
+          ports:
+            - containerPort: 8080
+          
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: mortgage-service
+spec:
+  type: LoadBalancer
+  selector:
+    app: mortgage-checker
+  ports:
+    - protocol: TCP
+      port: 80
+      targetPort: 8080
+      
